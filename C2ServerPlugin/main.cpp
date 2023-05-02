@@ -6,17 +6,12 @@ unsigned long main_thread(void* lpParameter) {
 
 	unsigned char* module_base{ reinterpret_cast<unsigned char*>(GetModuleHandleA("Chivalry2-Win64-Shipping.exe")) };
 
-	auto cmd_permission{ module_base + 0x1830D63 }; // Patch for command permission when executing commands (UTBLLocalPlayer::Exec)
-	auto login_call{ module_base + 0x17E346B }; // Patch to prevent listen server crash on VTable call (UTBLGameInstance::HandleNativeLoginChanged)
+	auto cmd_permission{ module_base + 0x1997353 }; // Patch for command permission when executing commands (UTBLLocalPlayer::Exec)
 
 	DWORD d;
 	VirtualProtect(cmd_permission, 1, PAGE_EXECUTE_READWRITE, &d);
 	*cmd_permission = 0xEB; // Patch to JMP
 	VirtualProtect(cmd_permission, 1, d, NULL); //TODO: Convert patch to hook.
-
-	VirtualProtect(login_call, 1, PAGE_EXECUTE_READWRITE, &d);
-	*login_call = 0xEB; // Patch to JMP
-	VirtualProtect(login_call, 1, d, NULL);
 
 	ExitThread(0);
 	return 0;
