@@ -6,7 +6,9 @@ unsigned long main_thread(void* lpParameter) {
 
 	unsigned char* module_base{ reinterpret_cast<unsigned char*>(GetModuleHandleA("Chivalry2-Win64-Shipping.exe")) };
 
-	auto cmd_permission{ module_base + 0x1997f03 }; // Patch for command permission when executing commands (UTBLLocalPlayer::Exec)
+	auto cmd_permission{ module_base + 0x199CDA3 }; // Patch for command permission when executing commands (UTBLLocalPlayer::Exec)
+
+	// 75 1A 45 84 ED 75 15 48 85 F6 74 10 40 38 BE ? ? ? ? 74 07 32 DB E9 ? ? ? ? 48 8B 5D 60 49 8B D6 4C 8B 45 58 4C 8B CB 49 8B CF (Points directly to instruction: first JNZ)
 
 	DWORD d;
 	VirtualProtect(cmd_permission, 1, PAGE_EXECUTE_READWRITE, &d);
